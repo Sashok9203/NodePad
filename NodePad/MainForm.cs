@@ -8,24 +8,35 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection.Metadata.Ecma335;
 
 namespace WinFormsApp1
 {
     public partial class MainForm : Form
     {
         private string? path = null;
-        bool saved = false;
-
+        bool _saved = false;
+        bool Saved
+        {
+            get => _saved;
+            set
+            {
+                _saved = value;
+                saveToolStripMenuItem.Enabled = !value;
+                saveToolStripButton.Enabled = !value;
+            }
+        }
         public MainForm()
         {
-
             InitializeComponent();
-
+            pastToolStripMenuItem.Enabled = richTextBox.CanPaste(DataFormats.GetFormat(DataFormats.Text));
+            pastToolStripButton.Enabled = pastToolStripMenuItem.Enabled;
+            _saved = false;
         }
 
         private void newMenuItem_Click(object sender, EventArgs e)
         {
-            if (!saved && MessageBox.Show("Save File ?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) SaveText();
+            saveDial();
             richTextBox.Clear();
             path = null;
         }
@@ -33,101 +44,126 @@ namespace WinFormsApp1
         private void openFile(object sender, EventArgs e)
         {
             OpenFileDialog opd = new();
-            opd.Filter = "AllFiles(*.*)|*.*|Text Files(*.txt)|*.txt||";
+            opd.Filter = "Txt Files (*.txt)|*.txt|RichTxt files (*.rtxt)|*.rtxt";
             if (opd.ShowDialog() == DialogResult.OK)
             {
                 path = opd.FileName;
-                richTextBox.Text = File.ReadAllText(path);
+                if (Path.GetExtension(opd.FileName) == ".txt") richTextBox.Text = File.ReadAllText(path);
+                else richTextBox.Rtf = File.ReadAllText(path);
             }
+            Saved = true;
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveText(path);
-        }
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e) => SaveText(path);
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveText();
-        }
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) => SaveText();
 
         private void SaveText(string? path = null)
         {
+            SaveFileDialog? sfd = null;
             if (path == null)
             {
-                SaveFileDialog sfd = new();
-                sfd.DefaultExt = ".txt";
+                sfd = new()
+                {
+                    Filter = "Text Files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt",
+                    FilterIndex = 1,
+                    RestoreDirectory = true
+                };
                 if (sfd.ShowDialog() != DialogResult.OK) return;
                 this.path = sfd.FileName;
             }
-            File.WriteAllText(this.path, richTextBox.Text);
-            saved = true;
+            if (Path.GetExtension(this.path) == ".txt") File.WriteAllText(this.path, richTextBox.Text);
+            else File.WriteAllText(this.path, richTextBox.Rtf);
+            Saved = true;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!saved && !string.IsNullOrEmpty(richTextBox.Text) && MessageBox.Show("Save File ?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) SaveText();
+            saveDial();
             Close();
         }
 
         private void richTextBox_TextChanged(object sender, EventArgs e)
         {
+
+            undoToolStripButton.Enabled = richTextBox.CanUndo;
+            undoToolStripMenuItem.Enabled = richTextBox.CanUndo;
+            redoToolStripButton.Enabled = richTextBox.CanRedo;
+            redoToolStripMenuItem.Enabled = richTextBox.CanRedo;
             charsCount.Text = $"Chars: {richTextBox.Text.Length,-5}";
-            linesCount.Text = $"Lines: {richTextBox.Lines.Count()}";
-            saved = false;
+            linesCount.Text = $"Lines: {richTextBox.Lines.Length}";
+            selectAllToolStripMenuItem.Enabled = richTextBox.Text.Length != 0;
+            Saved = false;
         }
 
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(richTextBox.CanUndo) richTextBox.Undo();
-        }
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.Undo();
 
-        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(richTextBox.CanRedo) richTextBox.Redo();
-        }
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.Redo();
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           if(richTextBox.SelectedText.Length != 0 ) richTextBox.Copy();
+            if (!pastToolStripMenuItem.Enabled)
+            {
+                pastToolStripMenuItem.Enabled = true;
+                pastToolStripButton.Enabled = pastToolStripMenuItem.Enabled;
+            }
+            richTextBox.Copy();
         }
 
-        private void pastToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-           /* if(Clipboard.ContainsData("string"))*/  richTextBox.Paste();
-        }
+        private void pastToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.Paste();
 
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (richTextBox.SelectedText.Length != 0) richTextBox.Cut();
-        }
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.Cut();
 
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (richTextBox.Text.Length != 0) richTextBox.SelectAll();
-        }
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.SelectAll();
 
-        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (richTextBox.SelectedText.Length != 0) richTextBox.DeselectAll();
-        }
+        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox.DeselectAll();
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("NotePad...", "About");
-        }
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e) => MessageBox.Show("NotePad...", "About");
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!saved! && !string.IsNullOrEmpty(richTextBox.Text) && MessageBox.Show("Save File ?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) SaveText();
-        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) => saveDial();
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FontDialog fd = new();
             if (fd.ShowDialog() == DialogResult.OK)
             {
-                Font = fd.Font;
+                if (richTextBox.SelectedText.Length == 0) richTextBox.Font = fd.Font;
+                else richTextBox.SelectionFont = fd.Font;
+            }
+        }
+
+        private void richTextBox_SelectionChanged(object sender, EventArgs e)
+        {
+            bool enabled = richTextBox.SelectedText.Length > 0;
+            copyToolStripMenuItem.Enabled = enabled;
+            copyToolStripButton.Enabled = enabled;
+            cutToolStripMenuItem.Enabled = enabled;
+            cutToolStripButton.Enabled = enabled;
+            deselectAllToolStripMenuItem.Enabled = enabled;
+        }
+
+        private void saveDial()
+        {
+            if (!Saved && !string.IsNullOrEmpty(richTextBox.Text) && MessageBox.Show("Save File ?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) SaveText();
+        }
+
+        private void fontBackColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new();
+            if (cd.ShowDialog() == DialogResult.OK)
+            {
+                if (richTextBox.SelectedText.Length == 0) richTextBox.BackColor = cd.Color;
+                else richTextBox.SelectionBackColor = cd.Color;
+            }
+        }
+
+        private void fontForColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new();
+            if (cd.ShowDialog() == DialogResult.OK)
+            {
+                if (richTextBox.SelectedText.Length == 0) richTextBox.ForeColor = cd.Color;
+                else richTextBox.SelectionColor = cd.Color;
             }
         }
     }

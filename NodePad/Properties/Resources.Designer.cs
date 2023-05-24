@@ -63,9 +63,39 @@ namespace WinFormsApp1.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _1455554314_line_15_icon_icons_com_53330 {
+            get {
+                object obj = ResourceManager.GetObject("1455554314_line-15_icon-icons.com_53330", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap font_colors_icon_237552 {
+            get {
+                object obj = ResourceManager.GetObject("font_colors_icon_237552", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap fontsize_99704 {
             get {
                 object obj = ResourceManager.GetObject("fontsize_99704", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap gui_text_color_icon_157009 {
+            get {
+                object obj = ResourceManager.GetObject("gui_text_color_icon_157009", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +133,29 @@ namespace WinFormsApp1.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap rgb_color_9827 {
+            get {
+                object obj = ResourceManager.GetObject("rgb_color_9827", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap save_file_disk_open_searsh_loading_clipboard_1513 {
             get {
                 object obj = ResourceManager.GetObject("save_file_disk_open_searsh_loading_clipboard_1513", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap saveall_sav_10186 {
+            get {
+                object obj = ResourceManager.GetObject("saveall_sav_10186", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
