@@ -15,7 +15,9 @@ namespace WinFormsApp1
     public partial class MainForm : Form
     {
         private string? path = null;
+
         bool _saved = false;
+
         bool Saved
         {
             get => _saved;
@@ -26,6 +28,7 @@ namespace WinFormsApp1
                 saveToolStripButton.Enabled = !value;
             }
         }
+
         public MainForm()
         {
             InitializeComponent();
@@ -44,7 +47,7 @@ namespace WinFormsApp1
         private void openFile(object sender, EventArgs e)
         {
             OpenFileDialog opd = new();
-            opd.Filter = "Txt Files (*.txt)|*.txt|RichTxt files (*.rtxt)|*.rtxt";
+            opd.Filter = "Text files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt";
             if (opd.ShowDialog() == DialogResult.OK)
             {
                 path = opd.FileName;
@@ -65,7 +68,7 @@ namespace WinFormsApp1
             {
                 sfd = new()
                 {
-                    Filter = "Text Files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt",
+                    Filter = "Text files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt",
                     FilterIndex = 1,
                     RestoreDirectory = true
                 };
@@ -86,9 +89,9 @@ namespace WinFormsApp1
         private void richTextBox_TextChanged(object sender, EventArgs e)
         {
 
-            undoToolStripButton.Enabled = richTextBox.CanUndo;
+            undoToolStripButton.Enabled   = richTextBox.CanUndo;
             undoToolStripMenuItem.Enabled = richTextBox.CanUndo;
-            redoToolStripButton.Enabled = richTextBox.CanRedo;
+            redoToolStripButton.Enabled   = richTextBox.CanRedo;
             redoToolStripMenuItem.Enabled = richTextBox.CanRedo;
             charsCount.Text = $"Chars: {richTextBox.Text.Length,-5}";
             linesCount.Text = $"Lines: {richTextBox.Lines.Length}";
