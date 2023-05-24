@@ -47,7 +47,7 @@ namespace WinFormsApp1
         private void openFile(object sender, EventArgs e)
         {
             OpenFileDialog opd = new();
-            opd.Filter = "Text files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt";
+            opd.Filter = "Text files (*.txt)|*.txt|RichText files (*.rtf)|*.rtf";
             if (opd.ShowDialog() == DialogResult.OK)
             {
                 path = opd.FileName;
@@ -68,7 +68,7 @@ namespace WinFormsApp1
             {
                 sfd = new()
                 {
-                    Filter = "Text files (*.txt)|*.txt|RichText files (*.rtxt)|*.rtxt",
+                    Filter = "Text files (*.txt)|*.txt|RichText files (*.rtf)|*.rtf",
                     FilterIndex = 1,
                     RestoreDirectory = true
                 };
