@@ -386,7 +386,7 @@
             copyToolStripButton.Name = "copyToolStripButton";
             copyToolStripButton.Size = new Size(23, 22);
             copyToolStripButton.Text = "Copy";
-            copyToolStripButton.Click += pastToolStripMenuItem_Click;
+            copyToolStripButton.Click += copyToolStripMenuItem_Click;
             // 
             // pastToolStripButton
             // 

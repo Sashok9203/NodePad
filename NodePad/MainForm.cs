@@ -89,9 +89,9 @@ namespace WinFormsApp1
         private void richTextBox_TextChanged(object sender, EventArgs e)
         {
 
-            undoToolStripButton.Enabled   = richTextBox.CanUndo;
+            undoToolStripButton.Enabled = richTextBox.CanUndo;
             undoToolStripMenuItem.Enabled = richTextBox.CanUndo;
-            redoToolStripButton.Enabled   = richTextBox.CanRedo;
+            redoToolStripButton.Enabled = richTextBox.CanRedo;
             redoToolStripMenuItem.Enabled = richTextBox.CanRedo;
             charsCount.Text = $"Chars: {richTextBox.Text.Length,-5}";
             linesCount.Text = $"Lines: {richTextBox.Lines.Length}";
